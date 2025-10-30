@@ -162,7 +162,7 @@ This non-standard CSS property tells the application that this element should ac
 
 Running `pear run --dev .` should show
 
-![Layout of the app](../assets/chat-app-3.png)
+![Layout of the app](/img/chat-app-3.png)
 
 
 ## Step 2. Module dependencies
@@ -291,19 +291,19 @@ In the first app, click on `Create`. A random topic will appear at the top.
 Note that topics consist of 64 hexadecimal characters (32 bytes).
 
 <p align="center">
-  <img src="../assets/chat-app-4a.png" alt="The first app, with the topic"/>
+  <img src="/img/chat-app-4a.png" alt="The first app, with the topic"/>
 </p>
 
 Paste the topic into the second app, then click on `Join`.
 
 <p align="center">
-  <img src="../assets/chat-app-4b.png" alt="Second app, using topic from the first"/>
+  <img src="/img/chat-app-4b.png" alt="Second app, using topic from the first"/>
 </p>
 
 Once connected, messages can be sent between each chat application.
 
 <p align="center">
-  <img src="../assets/chat-app-5a.png" alt="View from the first app"/> <img src="../assets/chat-app-5b.png" alt="View from the second app"/>
+  <img src="/img/chat-app-5a.png" alt="View from the first app"/> <img src="/img/chat-app-5b.png" alt="View from the second app"/>
 </p>
 
 ### Discussion

@@ -33,7 +33,7 @@ pear run --dev .
 
 The app should open in development mode. In this mode developer tools are also opened.
 
-![Running pear run --dev .](../assets/chat-app-1.png)
+![Running pear run --dev .](/img/chat-app-1.png)
 
 ## Step 3. Automatic Reload
 
@@ -57,7 +57,7 @@ Change `<h1>desktop</h1>` to `<h1>Hello world</h1>`.
 
 The app should now show:
 
-![Automatic reload](../assets/chat-app-2.png)
+![Automatic reload](/img/chat-app-2.png)
 
 > Live reload with hot-module reloading is possible by using the `pear.watch` configuration and the [`pear.updates`](../reference/pear/api.md#pear.updates-listener-less-than-async-function-or-function-greater-than-greater-than-streamx.readabl) API. The [pear-hotmods](https://github.com/holepunchto/pear-hotmods) convenience module can also be used.
 

@@ -187,7 +187,7 @@ Run the application using:
 pear run --dev .
 ```
 
-![Layout of the app](../assets/pear-init.png)
+![Layout of the app](/img/pear-init.png)
 
 ## Config file
 

@@ -109,7 +109,7 @@ Trust application?
 ```
 The trust dialog is a security mechanism in Pear that appears when the user tries to run an application from an unknown or untrusted key for the first time. In case that the app is run in detached mode, for example, when clicking on a pear link in the browser, the trust dialog is a GUI (Graphical User Interface). 
 
-![Trust dialog](../assets/trust-dialog.png)
+![Trust dialog](/img/trust-dialog.png)
 
 > During development with `pear run --dev`, applications are automatically trusted, as they are assumed to be safe for testing purposes. Trust dialog can be suppressed using the  `--no-ask` flag with `pear run` in which case the application will automatically decline unknown keys.
 
