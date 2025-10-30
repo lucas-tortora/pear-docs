@@ -27,17 +27,17 @@ Commands:
 | -------- | ----------------------------- | ------------------------------------  |
 | init     |                               | Initializes a new storage on the cwd  |
 | touch    | [options]                     | Create a writable Hyperdrive          |
-| mirror   | [options] <src> <dst>         | Mirror a drive into another drive     |
-| ls       | [options] <src> [path]        | List files of the drive               |
+| mirror   | [options] `<src>` `<dst>`         | Mirror a drive into another drive     |
+| ls       | [options] `<src>` [path]        | List files of the drive               |
 | seed     | [options] [key]               | Share a Hyperdrive                    |
-| download | [options] <key>               | Archive download a Hyperdrive by key  |
-| serve    | [options] <src>               | Creates a HTTP drive server           |
-| put      | [options] <src> <path> <blob> | Create a file                         |
-| entry    | [options] <src> <path>        | Show a single entry file              |
-| get      | [options] <src> <path>        | Show the file content                 |
-| rm       | [options] <src> <path>        | Delete a file                         |
-| info     | [options] <key>               | Show info about the Hyperdrive        |
-| purge    | [options] <key>               | Delete all local storage of the drive |
+| download | [options] `<key>`               | Archive download a Hyperdrive by key  |
+| serve    | [options] `<src>`               | Creates a HTTP drive server           |
+| put      | [options] `<src>` `<path>` `<blob>` | Create a file                         |
+| entry    | [options] `<src>` `<path>`        | Show a single entry file              |
+| get      | [options] `<src>` `<path>`        | Show the file content                 |
+| rm       | [options] `<src>` `<path>`        | Delete a file                         |
+| info     | [options] `<key>`               | Show info about the Hyperdrive        |
+| purge    | [options] `<key>`               | Delete all local storage of the drive |
 
 ## API
 Use `drives --help` for more information, `drives mirror --help`, etc.
@@ -72,7 +72,7 @@ drives touch
 Source and destination can be a folder path or a drive key.
 
 ```bash
-drives mirror <src> <dst>
+drives mirror `<src>` `<dst>`
 ```
 
 Use `--live` for real-time mirroring.

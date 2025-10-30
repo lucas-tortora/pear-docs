@@ -25,11 +25,11 @@ Flags:
   --help|-h             Show help
 ```
 
-The specified `<script>` or `<filename>` is run using `Module.load()`. For more information on the module system and the supported formats, see <https://github.com/holepunchto/bare-module>.
+The specified `<script>` or `<filename>` is run using `Module.load()`. For more information on the module system and the supported formats, see [BareModule](https://github.com/holepunchto/bare-module).
 
 ## Architecture
 
-Bare is built on top of <https://github.com/holepunchto/libjs>, which provides low-level bindings to V8 in an engine independent manner, and <https://github.com/libuv/libuv>, which provides an asynchronous I/O event loop. Bare itself only adds a few missing pieces on top to support a wider ecosystem of modules:
+Bare is built on top of [holepunchto/libjs](https://github.com/holepunchto/libjs), which provides low-level bindings to V8 in an engine independent manner, and [libuv/libuv](https://github.com/libuv/libuv), which provides an asynchronous I/O event loop. Bare itself only adds a few missing pieces on top to support a wider ecosystem of modules:
 
 1. A module system supporting both CJS and ESM with bidirectional interoperability between the two.
 2. A native addon system supporting both statically and dynamically linked addons.
@@ -74,7 +74,7 @@ The suspension API is available through `bare_suspend()` and `bare_resume()` fro
 
 ## Building
 
-<https://github.com/holepunchto/bare-make> is used for compiling Bare. Start by installing the tool globally:
+[`BareMake`](https://github.com/holepunchto/bare-make) is used for compiling Bare. Start by installing the tool globally:
 
 ```console
 npm i -g bare-make

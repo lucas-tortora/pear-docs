@@ -4,7 +4,7 @@ Pear Runtime can be installed via [npm](https://www.npmjs.com/).
 
 Since `npm` (or equivalent package manager) is needed to install application dependencies this guide will walk through installing `pear` with `npm`.
 
-{% embed url="https://www.youtube.com/watch?v=y2G97xz78gU" %} Build with Pear - Episode 01: Developing with Pear {% embeded %}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y2G97xz78gU?si=c91GU2DKpg3urbWB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Requirements
 

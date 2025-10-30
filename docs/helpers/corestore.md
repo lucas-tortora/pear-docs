@@ -10,7 +10,7 @@ Corestore is a Hypercore factory that makes it easier to manage large collection
   * [Create a new instance](corestore.md#store-new)
   * Basic:
     * Methods:
-      * [store.get(key | { key, name, exclusive, \[options\] })](corestore.md#store.get)
+      * [store.get(key | { key, name, exclusive, [options] })](corestore.md#store.get)
       * [store.replicate(options|stream)](corestore.md#store.replicate)
       * [store.namespace(name)](corestore.md#store.namespace)
       * [store.session(\[options\])](corestore.md#store.sesssion)

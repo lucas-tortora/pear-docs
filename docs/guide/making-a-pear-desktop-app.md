@@ -4,7 +4,7 @@ This guide demonstrates how to build a peer-to-peer chat application.
 
 It continues where [Starting a Pear Desktop Project](./starting-a-pear-desktop-project.md) left off.
 
-{% embed url="https://www.youtube.com/watch?v=y2G97xz78gU" %} Build with Pear - Episode 01: Developing with Pear {% embeded %}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y2G97xz78gU?si=E8UmXSS2WWYtIV1V" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Step 1. HTML Structure and CSS Styles
 
@@ -291,19 +291,19 @@ In the first app, click on `Create`. A random topic will appear at the top.
 Note that topics consist of 64 hexadecimal characters (32 bytes).
 
 <p align="center">
-  <img src="../assets/chat-app-4a.png" alt="The first app, with the topic">
+  <img src="../assets/chat-app-4a.png" alt="The first app, with the topic"/>
 </p>
 
 Paste the topic into the second app, then click on `Join`.
 
 <p align="center">
-  <img src="../assets/chat-app-4b.png" alt="Second app, using topic from the first">
+  <img src="../assets/chat-app-4b.png" alt="Second app, using topic from the first"/>
 </p>
 
 Once connected, messages can be sent between each chat application.
 
 <p align="center">
-  <img src="../assets/chat-app-5a.png" alt="View from the first app"> <img src="../assets/chat-app-5b.png" alt="View from the second app">
+  <img src="../assets/chat-app-5a.png" alt="View from the first app"/> <img src="../assets/chat-app-5b.png" alt="View from the second app"/>
 </p>
 
 ### Discussion

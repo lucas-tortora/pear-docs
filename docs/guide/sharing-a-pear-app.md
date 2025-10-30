@@ -2,7 +2,7 @@
 
 Applications can be shared with peers by seeding them to the network from an efficient local data structure (a [hypercore](../building-blocks/hypercore.md)). We call the mirroring of a local file system into the Pear platform Application Storage "staging". Seeding is sharing an app from a machine over the Distributed Hash Table (DHT) (via [hyperswarm](../building-blocks/hyperswarm.md)) so that other peers can replicate, consume and reseed the application.
 
-{% embed url="https://www.youtube.com/watch?v=BEadqmp7lA0" %} Build with Pear - Episode 02: Sharing Pear Applications {% embeded %}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BEadqmp7lA0?si=QCltjBYcoju1XyNb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 This guide can either follow on from, [Making a Pear Desktop Application](./making-a-pear-desktop-app.md), [Making a Pear Terminal Application](./making-a-pear-terminal-app.md), or get setup quickly with the following:
 

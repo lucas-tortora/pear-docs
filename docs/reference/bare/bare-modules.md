@@ -22,7 +22,7 @@ Bare provides no standard library beyond the core JavaScript API available throu
 | [bare-assert](https://github.com/holepunchto/bare-assert)                     | Assertion library for JavaScript                                                         | ![](https://img.shields.io/npm/v/bare-assert)           |
 | [bare-atomics](https://github.com/holepunchto/bare-atomics)                   | Native synchronization primitives for JavaScript                                         | ![](https://img.shields.io/npm/v/bare-atomics)          |
 | [bare-buffer](https://github.com/holepunchto/bare-buffer)                     | Native buffers for JavaScript                                                            | ![](https://img.shields.io/npm/v/bare-buffer)           |
-| [bare-bundle](https://github.com/holepunchto/bare-bundle)                     | Application bundle format for JavaScript, inspired by <https://github.com/electron/asar> | ![](https://img.shields.io/npm/v/bare-bundle)           |
+| [bare-bundle](https://github.com/holepunchto/bare-bundle)                     | Application bundle format for JavaScript, inspired by [electron/asar](https://github.com/electron/asar) | ![](https://img.shields.io/npm/v/bare-bundle)           |
 | [bare-channel](https://github.com/holepunchto/bare-channel)                   | Inter-thread messaging for JavaScript                                                    | ![](https://img.shields.io/npm/v/bare-channel)          |
 | [bare-console](https://github.com/holepunchto/bare-console)                   | WHATWG debugging console for JavaScript                                                  | ![](https://img.shields.io/npm/v/bare-console)          |
 | [bare-crypto](https://github.com/holepunchto/bare-crypto)                     | Cryptographic primitives for JavaScript                                                  | ![](https://img.shields.io/npm/v/bare-crypto)           |
@@ -49,7 +49,7 @@ Bare provides no standard library beyond the core JavaScript API available throu
 | [bare-readline](https://github.com/holepunchto/bare-readline)                 | Line editing for interactive CLIs with command history                                   | ![](https://img.shields.io/npm/v/bare-readline)         |
 | [bare-realm](https://github.com/holepunchto/bare-realm)                       | Realm support for Bare                                                                   | ![](https://img.shields.io/npm/v/bare-realm)            |
 | [bare-repl](https://github.com/holepunchto/bare-repl)                         | Read-Evaluate-Print-Loop environment for JavaScript                                      | ![](https://img.shields.io/npm/v/bare-repl)             |
-| [bare-rpc](https://github.com/holepunchto/bare-rpc)                           | <https://github.com/holepunchto/librpc> ABI compatible RPC for Bare                      | ![](https://img.shields.io/npm/v/bare-rpc)              |
+| [bare-rpc](https://github.com/holepunchto/bare-rpc)                           | [holepunchto/librpc](https://github.com/holepunchto/librpc) ABI compatible RPC for Bare                      | ![](https://img.shields.io/npm/v/bare-rpc)              |
 | [bare-semver](https://github.com/holepunchto/bare-semver)                     | Minimal semantic versioning library for Bare                                             | ![](https://img.shields.io/npm/v/bare-semver)           |
 | [bare-signals](https://github.com/holepunchto/bare-signals)                   | Native signal handling for JavaScript                                                    | ![](https://img.shields.io/npm/v/bare-signals)          |
 | [bare-stream](https://github.com/holepunchto/bare-stream)                     | Streaming data for JavaScript                                                            | ![](https://img.shields.io/npm/v/bare-stream)           |
@@ -709,4 +709,4 @@ methods = {
 
 #### `const bundle = new Module.Bundle()`
 
-See <https://github.com/holepunchto/bare-bundle>.
+See (holepunchto/bare-bundle)[https://github.com/holepunchto/bare-bundle].
