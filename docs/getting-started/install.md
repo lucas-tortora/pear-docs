@@ -1,4 +1,4 @@
-# Getting Started with Pear
+# Install the Pear Runtime
 
 Pear Runtime can be installed via [npm](https://www.npmjs.com/).
 
@@ -12,31 +12,31 @@ Pear runs on Windows, Mac and Linux.
 
 Linux requires the `libatomic` library which can be installed using:
 
-Debian/Ubuntu:
+### Debian/Ubuntu
 
 ```console
 sudo apt install libatomic1
 ```
 
-RHEL/CentOS:
+### RHEL/CentOS
 
 ```console
 sudo yum install libatomic
 ```
 
-Fedora:
+### Fedora
 
 ```console
 sudo dnf install libatomic
 ```
 
-Alpine Linux:
+### Alpine Linux
 
 ```console
 sudo apk add libatomic
 ```
 
-Arch Linux:
+### Arch Linux
 
 ```console
 sudo pacman -S libatomic_ops
@@ -50,7 +50,11 @@ On MacOS and Linux, we recommend installing `node` using [`nvm`](https://github.
 
 On Windows we recommend installing `node` with [`nvs`](https://github.com/jasongin/nvs#setup).
 
-> The Pear Runtime does not rely on `node`, `node` is only needed to install and run the `npm` package manager.
+:::info 
+
+The Pear Runtime does not rely on `node`, `node` is only needed to install and run the `npm` package manager.
+
+:::
 
 ## Setup
 

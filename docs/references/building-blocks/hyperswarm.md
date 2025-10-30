@@ -13,38 +13,38 @@ Notable features include:
 > [GitHub (Hyperswarm)](https://github.com/holepunchto/hyperswarm)
 
 * [Hyperswarm](../building-blocks/hyperswarm.md)
-  * [Create a new instance](hyperswarm.md#installation)
+  * [`Create a new instance`](hyperswarm.md#installation)
   * Basic:
     * Properties:
-      * [swarm.connecting](hyperswarm.md#swarm.connecting)
-      * [swarm.connections](hyperswarm.md#swarm.connections)
-      * [swarm.peers](hyperswarm.md#swarm.peers)
-      * [swarm.dht](hyperswarm.md#swarm.dht)
+      * [`swarm.connecting`](hyperswarm.md#swarm.connecting)
+      * [`swarm.connections`](hyperswarm.md#swarm.connections)
+      * [`swarm.peers`](hyperswarm.md#swarm.peers)
+      * [`swarm.dht`](hyperswarm.md#swarm.dht)
     * Methods:
-      * [swarm.join(topic, [options])](hyperswarm.md#swarm.join)
+      * [`swarm.join(topic, [options])`](hyperswarm.md#swarm.join)
     * Events:
-      * [connection](hyperswarm.md#swarm.onconnection)
-      * [update](hyperswarm.md#swarm.onupdate)
-    * [Clients and Servers:](hyperswarm.md#clients-and-servers)
+      * [`connection`](hyperswarm.md#swarm.onconnection)
+      * [`update`](hyperswarm.md#swarm.onupdate)
+    * [`Clients and Servers:`](hyperswarm.md#clients-and-servers)
       * Methods:
-        * [swarm.leave(topic)](hyperswarm.md#swarm.leave)
-        * [swarm.joinPeer(noisePublicKey)](hyperswarm.md#swarm.joinpeer)
-        * [swarm.leavePeer(noisePublicKey)](hyperswarm.md#swarm.leavepeer)
-        * [swarm.status(topic)](hyperswarm.md#swarm.status)
-        * [swarm.listen()](hyperswarm.md#swarm.listen)
-        * [swarm.flush()](hyperswarm.md#swarm.flush)
-    * [Peer info:](hyperswarm.md#peerinfo)
+        * [`swarm.leave(topic)`](hyperswarm.md#swarm.leave)
+        * [`swarm.joinPeer(noisePublicKey)`](hyperswarm.md#swarm.joinpeer)
+        * [`swarm.leavePeer(noisePublicKey)`](hyperswarm.md#swarm.leavepeer)
+        * [`swarm.status(topic)`](hyperswarm.md#swarm.status)
+        * [`swarm.listen()`](hyperswarm.md#swarm.listen)
+        * [`swarm.flush()`](hyperswarm.md#swarm.flush)
+    * [`Peer info:`](hyperswarm.md#peerinfo)
       * Properties:
-        * [peerInfo.publicKey](hyperswarm.md#peerinfo.publickey)
-        * [peerInfo.topics](hyperswarm.md#peerinfo.topics)
-        * [peerInfo.prioritized](hyperswarm.md#peerinfo.prioritized)
+        * [`peerInfo.publicKey`](hyperswarm.md#peerinfo.publickey)
+        * [`peerInfo.topics`](hyperswarm.md#peerinfo.topics)
+        * [`peerInfo.prioritized`](hyperswarm.md#peerinfo.prioritized)
       * Methods:
-        * [peerInfo.ban(banStatus = false)](hyperswarm.md#peerinfo.ban)
-    * [Peer Discovery:](hyperswarm.md#peer-discovery)
+        * [`peerInfo.ban(banStatus = false)`](hyperswarm.md#peerinfo.ban)
+    * [`Peer Discovery:`](hyperswarm.md#peer-discovery)
       * Methods:
-        * [discovery.flushed()](hyperswarm.md#discovery.flushed)
-        * [discovery.refresh({ client, server })](hyperswarm.md#discovery.destroy)
-        * [discovery.destroy()](hyperswarm.md#discovery.destroy)
+        * [`discovery.flushed()`](hyperswarm.md#discovery.flushed)
+        * [`discovery.refresh({ client, server })`](hyperswarm.md#discovery.destroy)
+        * [`discovery.destroy()`](hyperswarm.md#discovery.destroy)
 
 ### Installation
 
@@ -84,7 +84,7 @@ A set of all active client/server connections.
 
 A Map containing all connected peers, of the form: `(Noise public key hex string) -> PeerInfo object`
 
-See the [`PeerInfo`](hyperswarm.md#peerinfo) API for more details.
+See the [``PeerInfo``](hyperswarm.md#peerinfo) API for more details.
 
 #### **`swarm.dht`** {#swarm.dht}
 
@@ -94,9 +94,9 @@ A [`HyperDHT`](./hyperdht.md) instance. Useful for lower-level control over Hype
 
 #### **`const discovery = swarm.join(topic, [options])`** {#swarm.join}
 
-Returns a [`PeerDiscovery`](hyperswarm.md#peer-discovery) object.
+Returns a [``PeerDiscovery``](hyperswarm.md#peer-discovery) object.
 
-Start discovering and connecting to peers sharing a common topic. As new peers are connected, they will be emitted from the swarm as [`connection`](hyperswarm.md#swarmonconnection-socket-peerinfo) events.
+Start discovering and connecting to peers sharing a common topic. As new peers are connected, they will be emitted from the swarm as [``connection``](hyperswarm.md#swarmonconnection-socket-peerinfo) events.
 
 `topic` must be a 32-byte Buffer and use a publicly sharable id, typically a Hypercore `discoveryKey` which we can then link to (join will leak the `topic` to DHT nodes).
 
@@ -117,7 +117,7 @@ Emitted whenever the swarm connects to a new peer.
 
 `socket` is an end-to-end (Noise) encrypted Duplex stream.
 
-`peerInfo` is a [`PeerInfo`](hyperswarm.md#peerinfo) instance.
+`peerInfo` is a [``PeerInfo``](hyperswarm.md#peerinfo) instance.
 
 #### `swarm.on('update', () => {})` {#swarm.onupdate}
 

@@ -1,6 +1,6 @@
 # Command Line Interface (CLI) 
 
-<mark style="background-color: #8484ff;">**experimental**</mark>
+**experimental**
 
 The Command Line Interface is the primary interface for Pear Development.
 

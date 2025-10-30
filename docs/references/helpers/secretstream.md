@@ -6,20 +6,20 @@ The SecretStream instance is a Duplex stream that supports usability as a normal
 
 >[GitHub (SecretStream)](https://github.com/holepunchto/hyperswarm-secret-stream)
 
-* [SecretStream](secretstream.md#installation)
-  * [Create a new instance](secretstream.md#secretstream.new)
+* [`SecretStream`](secretstream.md#installation)
+  * [`Create a new instance`](secretstream.md#secretstream.new)
   * Basic:
     * Properties:
-      * [s.publicKey](secretstream.md#secretstream.publickey)
-      * [s.remotePublicKey](secretstream.md#secretstream.remotepublickey)
-      * [s.handshakeHash](secretstream.md#secretstream.handshakehash)
+      * [`s.publicKey`](secretstream.md#secretstream.publickey)
+      * [`s.remotePublicKey`](secretstream.md#secretstream.remotepublickey)
+      * [`s.handshakeHash`](secretstream.md#secretstream.handshakehash)
     * Methods:
-      * [s.start(rawStream, \[options\])](secretstream.md#secretstream.startrawstream)
-      * [s.setTimeout(ms)](secretstream.md#secretstream.settimeout)
-      * [s.setKeepAlive(ms)](secretstream.md#secretstream.setkeepalive)
-      * [SecretStream.keyPair(\[seed\])](secretstream.md#secretstream.keypair)
+      * [`s.start(rawStream, \[options\])`](secretstream.md#secretstream.startrawstream)
+      * [`s.setTimeout(ms)`](secretstream.md#secretstream.settimeout)
+      * [`s.setKeepAlive(ms)`](secretstream.md#secretstream.setkeepalive)
+      * [`SecretStream.keyPair(\[seed\])`](secretstream.md#secretstream.keypair)
     * Events:
-      * [connect](secretstream.md#secretstream.onconnect)
+      * [`connect`](secretstream.md#secretstream.onconnect)
 
 ### Installation
 
@@ -45,8 +45,8 @@ Makes a new stream.
 | :-------------------: | -------------------------------------------------------------------------- | ----------------------------------------------------- |
 |     **`pattern`**     | Accept server connections for this topic by announcing it to the DHT       | String                                                |
 | **`remotePublicKey`** | PublicKey of the other party                                               | String                                                |
-|     **`keyPair`**     | Combination of PublicKey and SecretKey                                     | { publicKey, secretKey }                              |
-|    **`handshake`**    | To use a handshake performed elsewhere, pass it here                       | { tx, rx, handshakeHash, publicKey, remotePublicKey } |
+|     **`keyPair`**     | Combination of PublicKey and SecretKey                                     | `{ publicKey, secretKey }`                              |
+|    **`handshake`**    | To use a handshake performed elsewhere, pass it here                       | `{ tx, rx, handshakeHash, publicKey, remotePublicKey }` |
 
 The SecretStream returned is a Duplex stream to write data to and read data from, it's a normal stream with payloads that are encrypted using the libsodium secretstream.
 
