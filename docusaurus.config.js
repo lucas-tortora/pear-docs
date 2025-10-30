@@ -91,12 +91,10 @@ const config = {
         },
         items: [
           {
-            to: "/docs/getting-started/install",
+            to: "/getting-started/install/",
             label: "Getting Started",
             position: "left",
           },
-          { to: "/docs/how-to/", label: "How To", position: "left" },
-          { to: "/docs/references/", label: "References", position: "left" },
           {
             href: "https://github.com/lucas-tortora/pear",
             label: "GitHub",
