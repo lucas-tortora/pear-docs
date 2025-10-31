@@ -80,9 +80,7 @@ const config = {
     ({
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
-      colorMode: {
-        respectPrefersColorScheme: true,
-      },
+      defaultMode: "dark",
       navbar: {
         title: "Lucas Tortora - Pear Docs Revamp",
         logo: {
@@ -109,7 +107,15 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
+      mermaid: {
+        theme: {light: 'dark', dark: 'dark'},
+      },
     }),
+    markdown:{
+      mermaid: true,
+    },
+    themes: ['@docusaurus/theme-mermaid'],
+    
 };
 
 export default config;

@@ -1,4 +1,4 @@
-## Get a List of Pear Applications I've Installed
+# List Installed Pear Applications
 
 Running the following command in the terminal will list installed applications;
 
