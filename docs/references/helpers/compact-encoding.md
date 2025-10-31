@@ -82,7 +82,7 @@ cenc.string.decode(state) // 'hi'
 
 ```
 
-### Helpers {#helpers}
+### Helpers
 
 To encode to a buffer or decode from one, use the `encode` and `decode` helpers to reduce boilerplate.
 

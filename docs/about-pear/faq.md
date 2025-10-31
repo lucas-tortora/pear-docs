@@ -1,33 +1,6 @@
 # Frequently Asked Questions
 
-## How Do I Get a List of Pear Applications I've Installed?
-
-Running the following command in the terminal will list installed applications;
-
-```console
-pear data apps
-```
-
-It will return a list like the following:
-
-```
-- pear://keet
-    storage: ./pear/app-storage/by-dkey/197ea022b663edbedcf0b2a0fe44ebc99c21448cb46d375ec77d95de6e0a4c1a
-
-- pear://runtime
-    storage: ./pear/app-storage/by-dkey/50f2c1326de970da319534164017f23101c6badd5497a99045f8d9ef13978995
-
-- pear://38cna455dbguiatg46z98cs7b6p4t4sh6hskozuhmipmpkxmmeuy
-    storage: ./pear/app-storage/by-dkey/be6ff2fc20eb691af1ff7b90d5848ee1e22d2fe4fab031900e1014e224f659ab
-```
-
-For more information about the `pear data apps` command, see the [cli docs](./cli.md#pear-data-apps-flags-link).
-
-## How Do I Uninstall a Pear Application?
-
-Uninstalling Pear Applications is currently not supported. You can reset the storage for an application via the `pear reset <link>` command. This is a **destructive** command that will permanently delete the storage for the application loosing all data it contains. Use with caution.
-
-For more information about the `pear reset` command, see the [cli docs](./cli.md#pear-reset-flags-less-than-link-greater-than).
+Placeholder. These FAQs have been added from the current docs, but would need be reviewed. 
 
 ## Where is the Pear Application stored?
 

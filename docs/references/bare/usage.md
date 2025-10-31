@@ -1,12 +1,13 @@
-# Bare
+# Usage
 
-Small and modular JavaScript runtime for desktop and mobile. Like Node.js, it provides an asynchronous, event-driven architecture for writing applications in the lingua franca of modern software. Unlike Node.js, it makes embedding and cross-device support core use cases, aiming to run just as well on your phone as on your laptop. The result is a runtime ideal for networked, peer-to-peer applications that can run on a wide selection of hardware.
+## Install Bare
+
+You can install Bare using the following command:
 
 ```sh
 npm i -g bare
 ```
-
-## Usage
+## Basic Usage
 
 ```console
 bare [flags] <filename> [...args]
@@ -26,16 +27,6 @@ Flags:
 ```
 
 The specified `<script>` or `<filename>` is run using `Module.load()`. For more information on the module system and the supported formats, see [BareModule](https://github.com/holepunchto/bare-module).
-
-## Architecture
-
-Bare is built on top of [holepunchto/libjs](https://github.com/holepunchto/libjs), which provides low-level bindings to V8 in an engine independent manner, and [libuv/libuv](https://github.com/libuv/libuv), which provides an asynchronous I/O event loop. Bare itself only adds a few missing pieces on top to support a wider ecosystem of modules:
-
-1. A module system supporting both CJS and ESM with bidirectional interoperability between the two.
-2. A native addon system supporting both statically and dynamically linked addons.
-3. Light-weight thread support with synchronous joins and shared array buffer support.
-
-Everything else if left to userland modules to implement using these primitives, keeping the runtime itself succint and _bare_. By abstracting over both the underlying JavaScript engine using `libjs` and platform I/O operations using `libuv`, Bare allows module authors to implement native addons that can run on any JavaScript engine that implements the `libjs` ABI and any system that `libuv` supports.
 
 ## API
 
@@ -121,33 +112,3 @@ Bare provides a few compile options that can be configured to customize various 
 | :--------------- | :------------------------- | :------------------------------------------------------ |
 | `BARE_ENGINE`    | `github:holepunchto/libjs` | The JavaScript engine to use                            |
 | `BARE_PREBUILDS` | `ON`                       | Enable prebuilds for supported third-party dependencies |
-
-## Platform support
-
-Bare uses a tiered support system to manage expectations for the platforms that it targets. Targets may move between tiers between minor releases and as such a change in tier will not be considered a breaking change.
-
-**Tier 1:** Platform targets for which prebuilds are provided as defined by the [`.github/workflows/prebuild.yml`](https://github.com/holepunchto/bare/blob/main/.github/workflows/prebuild.yml) workflow. Compilation and test failures for these targets will cause workflow runs to go red.
-
-**Tier 2:** Platform targets for which Bare is known to work, but without automated compilation and testing. Regressions may occur between releases and will be considered bugs.
-
-> [!NOTE]  
-> Development happens primarily on Apple hardware with Linux and Windows systems running as virtual machines.
-
-| Platform  | Architecture | Version                              | Tier | Notes                       |
-| :-------- | :----------- | :----------------------------------- | :--- | :-------------------------- |
-| GNU/Linux | `arm64`      | >= Linux 5.15, >= GNU C Library 2.35 | 1    | Ubuntu 22.04, OpenWrt 23.05 |
-| GNU/Linux | `x64`        | >= Linux 5.15, >= GNU C Library 2.35 | 1    | Ubuntu 22.04, OpenWrt 23.05 |
-| GNU/Linux | `arm64`      | >= Linux 5.10, >= musl 1.2           | 2    | Alpine 3.13, OpenWrt 22.03  |
-| GNU/Linux | `x64`        | >= Linux 5.10, >= musl 1.2           | 2    | Alpine 3.13, OpenWrt 22.03  |
-| GNU/Linux | `mips`       | >= Linux 5.10, >= musl 1.2           | 2    | OpenWrt 22.03               |
-| GNU/Linux | `mipsel`     | >= Linux 5.10, >= musl 1.2           | 2    | OpenWrt 22.03               |
-| Android   | `arm`        | >= 9                                 | 1    |
-| Android   | `arm64`      | >= 9                                 | 1    |
-| Android   | `ia32`       | >= 9                                 | 1    |
-| Android   | `x64`        | >= 9                                 | 1    |
-| macOS     | `arm64`      | >= 11.0                              | 1    |
-| macOS     | `x64`        | >= 11.0                              | 1    |
-| iOS       | `arm64`      | >= 14.0                              | 1    |
-| iOS       | `x64`        | >= 14.0                              | 1    | Simulator only              |
-| Windows   | `arm64`      | >= Windows 11                        | 1    |
-| Windows   | `x64`        | >= Windows 10                        | 1    |

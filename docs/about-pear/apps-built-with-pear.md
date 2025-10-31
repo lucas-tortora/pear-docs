@@ -1,3 +1,7 @@
+# Apps Built with Pear
+
+Placeholder section to showcase succesfull pear apps.
+
 # Keet.io
 
 [Keet](https://keet.io) is a fully P2P communications tool that's built entirely on Holepunch. Give it a try!
