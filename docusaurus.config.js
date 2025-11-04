@@ -89,8 +89,28 @@ const config = {
         },
         items: [
           {
+            to: "/about-pear/what-is-pear",
+            label: "About Pear",
+            position: "left",
+          },
+          {
             to: "/getting-started/install/",
             label: "Getting Started",
+            position: "left",
+          },
+          {
+            to: "/how-to/",
+            label: "How To",
+            position: "left",
+          },
+          {
+            to: "/tutorials/",
+            label: "Tutorials",
+            position: "left",
+          },
+          {
+            to: "/references/",
+            label: "References",
             position: "left",
           },
           {
