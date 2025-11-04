@@ -2,7 +2,7 @@
 
 Placeholder section to showcase succesfull pear apps.
 
-# Keet.io
+## Keet.io
 
 [Keet](https://keet.io) is a fully P2P communications tool that's built entirely on Holepunch. Give it a try!
 
@@ -38,3 +38,5 @@ Keet is available for download on Windows, macOS, and Linux desktops. [Download]
 #### Mobile
 
 Experience P2P communications on your mobile devices. Download Keet Mobile on your [Android](https://play.google.com/store/apps/details?id=io.keet.app) and [iOS](https://apps.apple.com/us/app/keet-by-holepunch/id6443880549) mobile devices today!
+
+## 

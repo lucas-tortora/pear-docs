@@ -32,15 +32,51 @@ Join the P2P revolution and [contribute](contribute-to-pear.md) to an open and d
 
 ## Web2
 
+In web2 application a user sends a request to a server. The server in turn queries database() for data. Once the DB return the data, the server processes it and responds to the client with the results.
+
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant S as Web Server
+    participant D as Database
+
+    U->>S: HTTP Request (e.g. GET /users)
+    S->>D: Query Data (SQL/NoSQL)
+    D-->>S: Return Query Results
+    S->>S: Handle Data (Process / Format)
+    S-->>U: HTTP Response (HTML, JSON, etc.)
+    U->>U: Render Response (UI update)
+
+```
+
 Traditional web2 applications rely heavily on centralized servers and infrastructure. This dependency leads to increased costs, single points of failure, and scalability limitations.
 
 ## Web3
 
+In web3 decentralized applications(dApps), the user makes a request through their wallet. The dApp then sends the transaction to a Smart Contract(SC), which in turn broadcasts it to the blockchain network and awaits confirmation through the node's consensus. After this, the transaction result is recorded on-chain and the dApp updates the user interface.
+
+```mermaid 
+sequenceDiagram
+    participant U as User (Wallet / DApp)
+    participant C as Smart Contract
+    participant N as Blockchain Network (Nodes)
+    participant S as Storage (e.g. IPFS / Arweave)
+
+    U->>C: Transaction Request (e.g. write data / call function)
+    C->>N: Broadcast Transaction to Network
+    N->>N: Consensus Validation (Proof of Stake / Work)
+    N-->>C: Confirmed Transaction
+    C->>S: Optional Off-chain Storage (files, metadata)
+    S-->>C: Return Storage Reference (e.g. IPFS CID)
+    C-->>U: Return Transaction Receipt / Event
+    U->>U: Update DApp UI (based on blockchain state)
+```
+
 Web3 is the next step in decentralization, it replaces centralized servers with a network of distributed decentralized nodes for computation. However, this is not without drawbacks:
 
-### Validator Nodes
+### Network Nodes and Consensus
 
-Validator nodes usually require substantial computational power. This means that though it is decentralized, it is not accessible to anyone and also adds huge infrastructure dependencies, the cost of which is usually transferred to developers and users alike through validator fees.
+Network nodes usually require substantial computational power to reach a consensus. This means that though it is decentralized, it is not accessible to anyone and also adds huge infrastructure dependencies, the cost of which is usually transferred to developers and users alike through fees.
 
 ### Bottlenecks
 
@@ -52,6 +88,28 @@ Though smart contract have added functionality to web3, the technology is scalab
 
 ## Pear
 
+In Pear’s peer-to-peer model, each peer announces itself and discovers others through the [HyperDHT](../about-pear/architecture/building-blocks.md#hyperdht), using a shared topic or public key. Once discovered, peers establish encrypted connections using [Hyperswarm](../about-pear/architecture/building-blocks.md#hyperswarm) and [SecretStream](../about-pear/architecture/helpers.md#secretstream), enabling them to communicate directly without intermediaries. 
+
+Data flows between peers in real time, and each peer maintains its own local state through [Hypercore](../about-pear/architecture/building-blocks.md#hypercore) or [Hyperbee](../about-pear/architecture/building-blocks.md#hyperbee), ensuring persistence and synchronization. This architecture eliminates the need for centralized servers or blockchains—applications run entirely at the network’s edge, powered by the connected peers themselves.
+
+```mermaid
+sequenceDiagram
+    participant A as Peer A (User 1)
+    participant DHT as HyperDHT (Distributed Hash Table)
+    participant B as Peer B (User 2)
+
+    A->>DHT: Announce Presence (Public Key, Topic)
+    B->>DHT: Lookup Peers (Matching Topic)
+    DHT-->>B: Return Peer A Info (Encrypted Address / Key)
+    B->>A: Establish Encrypted Connection (via Hyperswarm / SecretStream)
+    A-->>B: Connection Established ✅
+
+    A->>B: Send Data (Messages / Files / Streams)
+    B-->>A: Acknowledge or Reply
+    A->>A: Update Local State (Hypercore / Hyperbee)
+    B->>B: Update Local State (Hypercore / Hyperbee)
+```
+
 Pear is truly decentralized. Every peer can act as both a client and a server, ensuring apps are scalable, secure, and can grow globally without relying on centralized services.
 
-Pear is based on [bear](architecture.md#bear), small and modular JavaScript runtime for desktop and mobile, that allows seamless integration on both desktop and mobile.
+Pear is based on [Bare](architecture.md#bare), small and modular JavaScript runtime for desktop and mobile, that allows seamless integration on both desktop and mobile.

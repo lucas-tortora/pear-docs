@@ -1,18 +1,28 @@
-# Releasing a Pear Application
-
-Pear applications are stored in an append-only log ([hypercore](../building-blocks/hypercore.md)).
-
-Each version is identified by `<fork>.<length>.<key>`. The length corresponds to the length of the application's append-only log at the time.
+# Release a Pear Application
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/OTwY_avUPyI?si=cPLGJGvWNzzvCv-z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-`pear run <link>` opens the application.
+:::tip
 
-Before a release has been marked, the latest version is used. This is useful during development, to test the app locally and to share a preview with other peers.
+Pear applications are stored in an append-only log ([hypercore](../references/building-blocks/hypercore.md)).
 
-Once a release has been marked, `pear run <link>` opens the latest marked release.
+:::
 
-## Step 1: Staging Production
+Each version of a Pear application is identified by `<fork>.<length>.<key>`. The length corresponds to the length of the application's append-only log at the time.
+
+## Run a Pear App
+
+You can run a Pear app using the Pear CLI's [`pear run <link>`](../references/pear/cli.md#pear-run-flags-linkdir-app-args) command.
+
+### Unreleased
+
+If you are currently developing an app, you will likely want to test locally and share a preview with others. If you haven't [released your app yet](), Pear will use the latest version.
+
+### Released
+
+Once you have created a released, Pear will open the latest marked release.
+
+## 1: Staging Production
 
 `pear stage <channel name>` derives an application key from the channel name and the application name (as defined in the project's `package.json`).
 
@@ -48,7 +58,7 @@ Keep in mind that changes to an application can only propagate to peers when the
 pear seed production
 ```
 
-## Step 3: Running staged from a released app
+## 3: Running staged from a released app
 
 After marking a release, make a trivial change to the project (e.g. add a `console.log(...)` somewhere).
 

@@ -108,14 +108,13 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
       mermaid: {
-        theme: {light: 'dark', dark: 'dark'},
+        theme: { light: "dark", dark: "dark" },
       },
     }),
-    markdown:{
-      mermaid: true,
-    },
-    themes: ['@docusaurus/theme-mermaid'],
-    
+  markdown: {
+    mermaid: true,
+  },
+  themes: ["@docusaurus/theme-mermaid", "@saucelabs/theme-github-codeblock"],
 };
 
 export default config;

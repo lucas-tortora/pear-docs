@@ -4,8 +4,22 @@ Placeholder.
 
 ## Join the Community
 
+Join the HolePunch community at our [placeholder list of socials]
+
+## Contribute to the Codebase
+
+Paragrpah about being open source.
+
+### Raise a Bug Report
+
+### Reqesut a Feature
+
 Placeholder.
 
-## Contribute
+### Create a PR
 
-Placeholder.
+## Contribute to the Documentation
+
+### Request Content or Edits
+
+### Create Atricles

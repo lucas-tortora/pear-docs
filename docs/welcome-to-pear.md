@@ -16,7 +16,7 @@ Welcome to the Internet of Peers
 
 ### About Pear
 
-Learn about [what makes Pear unique](about-pear/what-is-pear.md), get an overview of Pear's [architecture and tooling](about-pear/architecture-and-tooling.md), learn about [use cases](about-pear/use-cases.md) and [apps](about-pear/apps.md) built with the Pear Runtime.
+Learn about [what makes Pear unique](about-pear/what-is-pear.md), get an overview of Pear's [architecture and tooling](about-pear/architecture/index.md), learn about [use cases](about-pear/use-cases.md) and [apps](about-pear/apps.md) built with the Pear Runtime.
 
 ### Getting Started
 
@@ -30,7 +30,7 @@ If you are already familiar with the [basics](getting-started/install.mdx) and a
 
 You can use the [references section](references/index.md) to learn about implementation and usage for [Bare](references/bare/index.md), [Pear](references/pear/index.md), its [building blocks](references/building-blocks/index.md), [helpers](references/helpers/index.md) and [tools](references/tools/index.md), and the underlying [Bare](references/bare/index.md) JavaScript runtime
 
-:::info Stability
+## Stability
 
 Throughout the documentation, indications of stability are provided. Some modules are well-established and used widely, making them highly unlikely to ever change. Other modules may be new, experimental, or known to have risks associated with their use.
 

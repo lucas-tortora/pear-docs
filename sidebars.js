@@ -23,7 +23,16 @@ const sidebars = {
       link: { type: "doc", id: "about-pear/what-is-pear" },
       items: [
         "about-pear/what-is-pear",
-        "about-pear/architecture",
+        {
+          type: "category",
+          label: "Architecture & Tooling",
+          items: [
+            "about-pear/architecture/index",
+            "about-pear/architecture/building-blocks",
+            "about-pear/architecture/helpers",
+            "about-pear/architecture/tools",
+          ],
+        },
         "about-pear/use-cases",
         "about-pear/apps-built-with-pear",
         "about-pear/faq",
@@ -35,23 +44,8 @@ const sidebars = {
       label: "Getting Started",
       items: [
         "getting-started/install",
-        {
-          type: "category",
-          label: "Create a Terminal App",
-          items: [
-            "getting-started/terminal/setup",
-            "getting-started/terminal/simple-chat-app",
-            "getting-started/terminal/debug",
-          ],
-        },
-        {
-          type: "category",
-          label: "Create a Desktop App",
-          items: [
-            "getting-started/desktop/setup",
-            "getting-started/desktop/simple-chat-app",
-          ],
-        },
+        "getting-started/setup",
+        "getting-started/simple-chat-app",
         "getting-started/release",
         "getting-started/share",
         "getting-started/best-practices",
@@ -63,6 +57,16 @@ const sidebars = {
       label: "How To",
       link: { type: "doc", id: "how-to/index" },
       items: [
+
+        {
+          type: "category",
+          label: "Create a Terminal App",
+          items: [
+            "how-to/terminal/setup",
+            "how-to/terminal/simple-chat-app",
+            "how-to/terminal/debug",
+          ],
+        },
         {
           type: "category",
           label: "Manage Installed Apps",
