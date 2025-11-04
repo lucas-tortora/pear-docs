@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkpear_docs_docusarus=globalThis.webpackChunkpear_docs_docusarus||[]).push([[2325],{2325:(s,a,c)=>{c.d(a,{createPacketServices:()=>e.$});var e=c(1477);c(7960)}}]);
