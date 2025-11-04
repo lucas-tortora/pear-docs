@@ -108,6 +108,7 @@ const sidebars = {
     {
       type: "category",
       label: "Tutorials",
+      link: { type: "doc", id: "tutorials/index" },
       items: [
         'tutorials/create-a-chat-app',
         'tutorials/create-a-discord-clone',
