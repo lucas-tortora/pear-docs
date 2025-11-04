@@ -15,7 +15,7 @@
  @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
  */
 const sidebars = {
-  tutorialSidebar: [
+  sidebar: [
     "welcome-to-pear",
     {
       type: "category",
@@ -103,6 +103,16 @@ const sidebars = {
         },
         "how-to/create-a-pear-init-template",
         "how-to/migrate-from-pear-v1-to-v2",
+      ],
+    },
+    {
+      type: "category",
+      label: "Tutorials",
+      items: [
+        'tutorials/create-a-chat-app',
+        'tutorials/create-a-discord-clone',
+        'tutorials/create-a-private-game-server',
+        "tutorials/create-a-todo-app",
       ],
     },
     {
