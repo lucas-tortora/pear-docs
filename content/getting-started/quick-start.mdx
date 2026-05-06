@@ -1,0 +1,74 @@
+---
+title: "Quickstart"
+description: "Run your first Pear application."
+docType: how-to
+schemaType: TechArticle
+---
+
+import { Steps, Step } from 'fumadocs-ui/components/steps'
+
+## Requirements
+
+Before you begin, install the following tools:
+
+- Node.js ≥ v22.17
+- npm ≥ v10.9
+- Git
+
+## Steps
+
+<Steps>
+<Step>
+
+### Clone the starter template
+
+Replace `my-app` with your project name. Git creates a folder with that name.
+
+```bash
+git clone https://github.com/holepunchto/hello-pear-electron my-app
+cd my-app
+```
+
+</Step>
+<Step>
+
+### Remove the upstream remote
+
+```bash
+git remote remove origin
+```
+
+</Step>
+<Step>
+
+### Set your app name
+
+Open `package.json` and update the following fields:
+
+```json
+{
+  "name": "my-app",
+  "productName": "My App"
+}
+```
+
+</Step>
+<Step>
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+</Step>
+<Step>
+
+### Start the app
+
+```bash
+npm start
+```
+
+</Step>
+</Steps>
