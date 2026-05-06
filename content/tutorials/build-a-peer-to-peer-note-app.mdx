@@ -1,0 +1,1018 @@
+---
+title: "Build a peer-to-peer note app"
+description: "Build a peer-to-peer note app with Pear."
+docType: tutorial
+schemaType: TechArticle
+---
+
+import { Steps, Step } from 'fumadocs-ui/components/steps'
+
+## Overview
+
+In this tutorial, we will build a peer-to-peer note app using Pear. By the end, you will have a working desktop app where peers can create, share, and sync notes directly.
+
+## Requirements
+
+Before you begin, install the following tools:
+
+- Node.js ≥ v22.17
+- npm ≥ v10.9
+- Git
+
+## Steps
+
+<Steps>
+<Step>
+
+### Clone the starter template
+
+```bash
+git clone https://github.com/holepunchto/hello-pear-electron note-app
+cd note-app
+```
+
+</Step>
+<Step>
+
+### Remove the upstream remote
+
+```bash
+git remote remove origin
+```
+
+</Step>
+<Step>
+
+### Set your app name
+
+Open `package.json` and update the following fields:
+
+```json
+{
+  "name": "note-app",
+  "productName": "Note App"
+}
+```
+
+</Step>
+<Step>
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+</Step>
+<Step>
+
+### Install P2P dependencies
+
+These packages form the P2P layer of the note app. Install them:
+
+```bash
+npm install z32 autobase blind-pairing corestore debounceify hyperdb hyperdispatch hyperschema hyperswarm
+```
+
+Here is what each package does:
+
+| Package | What it does |
+|---|---|
+| `corestore` | A collection of Hypercores, each identified by name or key, managed under a single storage root |
+| `hyperswarm` | Finds and connects peers over the internet by shared topic |
+| `autobase` | A multiwriter data structure that linearises concurrent writes from multiple writer Hypercores into an eventually consistent view |
+| `hyperdb` | A schema-driven database backed by Hyperbee for P2P use; organises data into typed collections with primary keys and indexes |
+| `hyperschema` | Defines typed binary schemas used by both HyperDB (for collections) and Hyperdispatch (for message types) |
+| `hyperdispatch` | Generates typed message handlers from a Hyperschema definition |
+| `blind-pairing` | Establishes a secure connection over HyperDHT using a shareable invite token; the candidate locates the member without prior knowledge of their identity |
+| `z32` | Encodes binary keys into compact, shareable strings |
+| `debounceify` | Ensures only one instance of an async function runs at a time; collapses multiple calls that arrive during execution into a single follow-up run |
+
+</Step>
+<Step>
+
+### Update `index.html`
+
+Replace the contents of `renderer/index.html` with the following:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pear Note</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+      * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background-color: rgb(220, 248, 220);
+      }
+      .notes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+      }
+      .note {
+        background-color: rgb(152, 233, 152);
+        width: calc(25% - 1.25rem);
+        min-height: 18.75rem;
+        border-radius: 0.3125rem;
+        box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+        padding: 0.625rem;
+      }
+      .note-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+      }
+      .note-title {
+        margin: 0;
+        font-weight: 450;
+      }
+      .note-content {
+        font-size: 0.9rem;
+        color: rgb(51, 51, 51);
+        line-height: 1.5rem;
+      }
+      .add-note {
+        position: fixed;
+        bottom: 3rem;
+        right: 3rem;
+        width: 3rem;
+        height: 3rem;
+        background-color: rgb(152, 233, 152);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+      }
+      .add-note:hover {
+        background-color: rgb(120, 220, 120);
+      }
+      .add-note-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 37.5rem;
+        height: auto;
+        background-color: rgb(255, 255, 255);
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .add-note-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .add-note-modal h2 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgb(51, 51, 51);
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        cursor: pointer;
+        color: rgb(100, 100, 100);
+        line-height: 1;
+        padding: 0;
+      }
+      .modal-close:hover {
+        color: rgb(51, 51, 51);
+      }
+      .add-note-modal input[type="text"] {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 0.0625rem solid rgb(180, 220, 180);
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+        background-color: rgb(255, 255, 255);
+        outline: none;
+      }
+      .add-note-modal input[type="text"]:focus {
+        border-color: rgb(120, 220, 120);
+      }
+      .add-note-modal textarea {
+        width: 100%;
+        height: 12rem;
+        padding: 0.5rem 0.75rem;
+        border: 0.0625rem solid rgb(180, 220, 180);
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+        background-color: rgb(255, 255, 255);
+        resize: vertical;
+        outline: none;
+      }
+      .add-note-modal textarea:focus {
+        border-color: rgb(120, 220, 120);
+      }
+      .add-note-modal button {
+        align-self: flex-end;
+        padding: 0.5rem 1.25rem;
+        background-color: rgb(152, 233, 152);
+        border: none;
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .add-note-modal button:hover {
+        background-color: rgb(120, 220, 120);
+      }
+      .hidden {
+        display: none;
+      }
+      .copy-invite-btn {
+        padding: 0.25rem 0.75rem;
+        background-color: rgb(200, 245, 200);
+        border: 0.0625rem solid rgb(160, 225, 160);
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: rgb(51, 51, 51);
+      }
+      .copy-invite-btn:hover {
+        background-color: rgb(170, 235, 170);
+      }
+      .join-bar {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background-color: rgb(200, 245, 200);
+        border-bottom: 0.0625rem solid rgb(160, 225, 160);
+      }
+      .join-bar input {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        border: 0.0625rem solid rgb(180, 220, 180);
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        background-color: rgb(255, 255, 255);
+        outline: none;
+      }
+      .join-bar input:focus {
+        border-color: rgb(120, 220, 120);
+      }
+      .join-bar button {
+        padding: 0.5rem 1.25rem;
+        background-color: rgb(152, 233, 152);
+        border: none;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .join-bar button:hover {
+        background-color: rgb(120, 220, 120);
+      }
+      .edit-btn {
+        padding: 0.25rem 0.75rem;
+        background-color: rgb(200, 245, 200);
+        border: 0.0625rem solid rgb(160, 225, 160);
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: rgb(51, 51, 51);
+      }
+      .edit-btn:hover {
+        background-color: rgb(170, 235, 170);
+      }
+      .note-actions {
+        display: flex;
+        gap: 0.375rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="join-bar">
+      <input id="join-input" type="text" placeholder="Paste invite key to join..." />
+      <button id="join-btn">Join</button>
+    </div>
+    <p id="v"></p>
+    <div class="add-note"> + </div>
+    <div class="add-note-modal hidden">
+      <div class="add-note-modal-header">
+        <h2>New Note</h2>
+        <button class="modal-close">X</button>
+      </div>
+      <input type="text" placeholder="Title" required/>
+      <textarea placeholder="Write your note here..." required></textarea>
+      <button id="create-note">Add Note</button>
+    </div>
+    <div class="note-ui">
+      <div class="notes">
+      </div>
+    </div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
+```
+
+Notice the following in the HTML:
+
+- A join bar for pasting invite keys
+- A floating `+` button to create notes
+- A modal form for note input
+- A notes grid to display synced notes
+
+</Step>
+<Step>
+
+### Create `schema.js`
+
+Create `schema.js` at the root of the project. This file defines the data shapes, HyperDB collections, and message types — and generates the files in `spec/` that `workers/note.js` imports.
+
+```javascript
+const Hyperschema = require('hyperschema')
+const HyperdbBuilder = require('hyperdb/builder')
+const Hyperdispatch = require('hyperdispatch')
+
+const SCHEMA_DIR = './spec/schema'
+const DB_DIR = './spec/db'
+const DISPATCH_DIR = './spec/dispatch'
+
+const hyperSchema = Hyperschema.from(SCHEMA_DIR)
+const schema = hyperSchema.namespace('pear-notes-app')
+
+schema.register({
+  name: 'writer',
+  fields: [{ name: 'key', type: 'buffer', required: true }]
+})
+
+schema.register({
+  name: 'note-ref',
+  fields: [{ name: 'id', type: 'string', required: true }]
+})
+schema.register({
+  name: 'note',
+  fields: [
+    { name: 'id', type: 'string', required: true },
+    { name: 'title', type: 'string', required: true },
+    { name: 'content', type: 'string', required: true }
+  ]
+})
+schema.register({
+  name: 'invite',
+  fields: [
+    { name: 'id', type: 'buffer', required: true },
+    { name: 'invite', type: 'buffer', required: true },
+    { name: 'publicKey', type: 'buffer', required: true }
+  ]
+})
+Hyperschema.toDisk(hyperSchema)
+
+const hyperdb = HyperdbBuilder.from(SCHEMA_DIR, DB_DIR)
+const db = hyperdb.namespace('pear-notes-app')
+
+db.collections.register({
+  name: 'invites',
+  schema: '@pear-notes-app/invite',
+  key: ['id']
+})
+db.collections.register({
+  name: 'note-refs',
+  schema: '@pear-notes-app/note-ref',
+  key: ['id']
+})
+db.collections.register({
+  name: 'notes',
+  schema: '@pear-notes-app/note',
+  key: ['id']
+})
+HyperdbBuilder.toDisk(hyperdb)
+
+const hyperdispatch = Hyperdispatch.from(SCHEMA_DIR, DISPATCH_DIR, { offset: 0 })
+const dispatch = hyperdispatch.namespace('pear-notes-app')
+dispatch.register({
+  name: 'add-writer',
+  requestType: '@pear-notes-app/writer'
+})
+dispatch.register({
+  name: 'add-invite',
+  requestType: '@pear-notes-app/invite'
+})
+dispatch.register({
+  name: 'add-note',
+  requestType: '@pear-notes-app/note'
+})
+Hyperdispatch.toDisk(hyperdispatch)
+```
+
+The file has three sections:
+
+- **Schema** — registers four typed structs under the `pear-notes-app` namespace: `writer` (a peer's public key), `note-ref` (a note ID reference), `note` (a full note with title and content), and `invite` (the blind-pairing invite data). `Hyperschema.toDisk()` writes these definitions to `spec/schema/`
+- **HyperDB** — registers three collections on top of those schemas: `invites`, `note-refs`, and `notes`, each keyed by `id`. `HyperdbBuilder.toDisk()` generates the queryable HyperDB spec into `spec/db/`
+- **Dispatch** — registers the three message types the app sends over IPC — `add-writer`, `add-invite`, and `add-note` — each linked to its schema type. `Hyperdispatch.toDisk()` generates the typed router and encoder into `spec/dispatch/`
+
+Run the file once to generate the `spec/` directory:
+
+```bash
+node schema.js
+```
+
+You will see `spec/schema/`, `spec/db/`, and `spec/dispatch/` appear. Both `workers/note.js` and `workers/account.js` import from these generated directories.
+
+</Step>
+<Step>
+
+### Create `workers/note.js`
+
+Create a new file at `workers/note.js` and add the following:
+
+```javascript
+const BlindPairing = require('blind-pairing')
+const NoteDispatch = require('../spec/dispatch')
+const Autobase = require('autobase')
+const z32 = require('z32')
+const HyperDB = require('hyperdb')
+const NoteDb = require('../spec/db')
+const { EventEmitter } = require('events')
+
+class Note extends EventEmitter {
+  constructor(store, swarm, invite) {
+    super()
+    this.store = store
+    this.swarm = swarm
+    this.invite = invite
+
+    this.pairing = new BlindPairing(swarm)
+
+    this.router = new NoteDispatch.Router()
+    this._setupRouter()
+
+    this.localBase = Autobase.getLocalCore(this.store)
+    this.base = null
+    this.pairMember = null
+  }
+
+  _setupRouter() {
+    this.router.add('@pear-notes-app/add-writer', async (data, { base }) => {
+      await base.addWriter(data.key)
+    })
+
+    this.router.add('@pear-notes-app/add-note', async (data, { view }) => {
+      await view.insert('@pear-notes-app/notes', data)
+    })
+
+    this.router.add('@pear-notes-app/add-invite', async (data, { view }) => {
+      await view.insert('@pear-notes-app/invites', data)
+    })
+  }
+
+  async open() {
+    await this.localBase.ready()
+    const localKey = this.localBase.key
+    const isEmpty = this.localBase.length === 0
+
+    let key
+    let encryptionKey
+    if (isEmpty && this.invite) {
+      const res = await new Promise((resolve) => {
+        this.pairing.addCandidate({
+          invite: z32.decode(this.invite),
+          userData: localKey,
+          onadd: resolve
+        })
+      })
+
+      key = res.key
+      encryptionKey = res.encryptionKey
+    }
+
+    await this.localBase.close()
+
+    this.base = new Autobase(this.store, key, {
+      encrypt: true,
+      encryptionKey,
+      open: this._openBase,
+      close: this._closeBase,
+      apply: this._applyBase.bind(this)
+    })
+
+    const writablePromise = new Promise((resolve) => {
+      this.base.on('update', () => {
+        if (this.base.writable) resolve()
+        if (!this.base._interrupting) this.emit('update')
+      })
+    })
+
+    await this.base.ready()
+    this.swarm.join(this.base.discoveryKey)
+    if (!this.base.writable) await writablePromise
+
+    this.view.core.download({ start: 0, end: -1 })
+
+    if (!this.invite) {
+      this.invite = await this.getInvite()
+    }
+
+    this.pairMember = this.pairing.addMember({
+      discoveryKey: this.base.discoveryKey,
+      onadd: async (request) => {
+        const inv = await this.view.findOne('@pear-notes-app/invites', { id: request.inviteId })
+        if (!inv) return
+        request.open(inv.publicKey)
+        await this.addWriter(request.userData)
+        request.confirm({
+          key: this.base.key,
+          encryptionKey: this.base.encryptionKey
+        })
+      }
+    })
+  }
+
+  _openBase(store) {
+    return HyperDB.bee(store.get('view'), NoteDb, { extension: false, autoUpdate: true })
+  }
+
+  async _applyBase(nodes, view, base) {
+    for (const node of nodes) {
+      await this.router.dispatch(node.value, { view, base })
+    }
+    await view.flush()
+  }
+
+  async _closeBase(view) {
+    await view.close()
+  }
+
+  get view() {
+    return this.base.view
+  }
+
+  async addWriter(key) {
+    await this.base.append(
+      NoteDispatch.encode('@pear-notes-app/add-writer', {
+        key
+      })
+    )
+  }
+
+  async close() {
+    await this.pairMember?.close()
+    await this.base?.close()
+    await this.pairing.close()
+  }
+
+  async addNote({ title, content, id }) {
+    this.invite = await this.getInvite()
+    await this.base.append(
+      NoteDispatch.encode('@pear-notes-app/add-note', {
+        id,
+        title,
+        content
+      })
+    )
+  }
+
+  async getInvite() {
+    const existing = await this.view.findOne('@pear-notes-app/invites', {})
+    if (existing) {
+      return z32.encode(existing.invite)
+    }
+    const { id, invite, publicKey } = BlindPairing.createInvite(this.base.key)
+
+    await this.base.append(
+      NoteDispatch.encode('@pear-notes-app/add-invite', {
+        id,
+        invite,
+        publicKey
+      })
+    )
+
+    return z32.encode(invite)
+  }
+}
+
+module.exports = Note
+```
+
+Here is what each method does:
+
+- **`constructor(store, swarm, invite)`** — initialises the instance, wraps the Hyperswarm in a `BlindPairing` instance, creates the Hyperdispatch message router, and gets the local writer Hypercore from the Corestore via Autobase
+- **`_setupRouter()`** — registers handlers for the three Hyperdispatch message types: `add-writer`, `add-note`, and `add-invite`
+- **`open()`** — if joining via invite, registers as a blind-pairing candidate on HyperDHT to receive the Autobase key and encryption key from the member; then opens the Autobase, joins the Hyperswarm on its discovery key, and registers as a member to accept incoming candidates
+- **`_openBase(store)`** — the Autobase `open` hook; creates the HyperDB view backed by a Hyperbee
+- **`_applyBase(nodes, view, base)`** — the Autobase `apply` hook; deterministically dispatches each linearised log entry through the router to build the HyperDB view
+- **`_closeBase(view)`** — the Autobase `close` hook; closes the HyperDB view on teardown
+- **`get view()`** — returns the live HyperDB view from the Autobase
+- **`addWriter(key)`** — appends an `add-writer` entry to the Autobase log, granting another peer write access to the shared Autobase
+- **`addNote({ title, content, id })`** — appends a new note entry to the Autobase log so all writers receive and apply it
+- **`getInvite()`** — returns an existing invite from the HyperDB view or creates one via `BlindPairing.createInvite()`, appends it to the Autobase log, and encodes the result as a `z32` string for sharing
+- **`close()`** — closes the blind-pairing member, the Autobase, and the BlindPairing instance
+
+Notice that `Note` extends `EventEmitter` and emits an `update` event whenever peers write new data. The renderer listens for this event to refresh the notes list in real time.
+
+</Step>
+<Step>
+
+### Create `workers/account.js`
+
+Create `workers/account.js`. This is the top-level worker class that manages all notes and communicates results back to the renderer over `Bare.IPC`.
+
+```javascript
+const HyperDB = require('hyperdb')
+const NoteDb = require('../spec/db')
+const Note = require('./note')
+const debounce = require('debounceify')
+
+class Account {
+  constructor(store, swarm) {
+    this.store = store
+    this.db = null
+    this.swarm = swarm
+    this.notes = {}
+  }
+
+  async open() {
+    const core = this.store.get({ name: 'account' })
+    this.db = HyperDB.bee(core, NoteDb, { extension: false, autoUpdate: true })
+    await this.db.ready()
+    await this._openNotes()
+  }
+
+  async _openNotes() {
+    const note_ref = await this.db
+      .find('@pear-notes-app/note-refs', {}, { reverse: true })
+      .toArray()
+
+    for (const ref of note_ref) {
+      const note = new Note(this.store.namespace(ref.id), this.swarm)
+      const emit = debounce(() => this._emitNote(note))
+      note.on('update', () => emit())
+      await note.open()
+      const content = await note.view.findOne('@pear-notes-app/notes', {})
+      this.notes[content.id] = note
+      await this._emitNote(note)
+    }
+  }
+
+  async addNote({ title, content }) {
+    const id = Math.random().toString(16).slice(2)
+    await this.db.insert('@pear-notes-app/note-refs', { id })
+    await this.db.flush()
+
+    const note = new Note(this.store.namespace(id), this.swarm)
+    const emit = debounce(() => this._emitNote(note))
+    note.on('update', () => emit())
+    await note.open()
+    const noteId = Math.random().toString(16).slice(2)
+    await note.addNote({ title, content, id: noteId })
+    this.notes[noteId] = note
+  }
+
+  async _emitNote(note) {
+    const content = await note.view.findOne('@pear-notes-app/notes', {})
+    if (!content) return
+    Bare.IPC.write(
+      JSON.stringify({
+        type: 'note-updated',
+        payload: content
+      })
+    )
+  }
+
+  async close() {
+    await Promise.all(Object.values(this.notes).map((n) => n.close()))
+    await this.db?.close()
+  }
+
+  async getInvite({ id }) {
+    const note = this.notes[id]
+    if (!note) return null
+    Bare.IPC.write(
+      JSON.stringify({
+        type: 'note-invite',
+        payload: {
+          invite: note.invite
+        }
+      })
+    )
+  }
+
+  async joinNote({ invite }) {
+    const id = Math.random().toString(16).slice(2)
+    await this.db.insert('@pear-notes-app/note-refs', { id })
+    await this.db.flush()
+
+    const note = new Note(this.store.namespace(id), this.swarm, invite)
+    const emit = debounce(() => this._emitNote(note))
+    note.on('update', () => emit())
+    await note.open()
+    const content = await note.view.findOne('@pear-notes-app/notes', {})
+    this.notes[content.id] = note
+  }
+
+  async editNote({ id, title, content }) {
+    const note = this.notes[id]
+    if (!note) return null
+    await note.addNote({ id, title, content })
+  }
+}
+
+module.exports = Account
+```
+
+Here is what each method does:
+
+- **`constructor(store, swarm)`** — initialises the account with a Corestore and Hyperswarm instance, and an empty `notes` map keyed by note ID
+- **`open()`** — gets a named Hypercore from the Corestore, wraps it in HyperDB, then calls `_openNotes()` to restore any previously created notes
+- **`_openNotes()`** — reads all saved note references from HyperDB, opens a `Note` instance for each, wraps `_emitNote` in `debounceify` so rapid peer updates collapse into one renderer call, and emits the current note content to the renderer
+- **`addNote({ title, content })`** — generates a random ID, inserts a note reference into HyperDB, opens a new `Note` instance, wraps `_emitNote` in `debounceify`, writes the first note entry, and registers the note in the local map
+- **`_emitNote(note)`** — reads the latest note content from the Note's HyperDB view and writes it to `Bare.IPC` as a `note-updated` message so the renderer can update the UI
+- **`close()`** — closes all open `Note` instances and the account HyperDB
+- **`getInvite({ id })`** — looks up the note by ID and writes its invite key to `Bare.IPC` as a `note-invite` message for the renderer to display
+- **`joinNote({ invite })`** — generates a new note reference ID, inserts it into HyperDB, opens a `Note` with the provided invite so the blind-pairing candidate flow connects to the member, then registers the joined note in the local map
+- **`editNote({ id, title, content })`** — looks up the note by ID and appends a new entry with the updated title and content
+
+Notice that `_emitNote` writes JSON directly to `Bare.IPC` — this is how the worker pushes data to the renderer without the renderer having to poll.
+
+</Step>
+<Step>
+
+### Update `workers/main.js`
+
+Replace the contents of `workers/main.js` with the following:
+
+```javascript
+const Corestore = require('corestore')
+const Hyperswarm = require('hyperswarm')
+const Account = require('./account.js')
+
+const store = new Corestore(Bare.argv[2])
+const swarm = new Hyperswarm()
+
+swarm.on('connection', (con) => store.replicate(con))
+
+const account = new Account(store, swarm)
+account.open()
+
+Bare.IPC.on('data', async (data) => {
+  const msg = JSON.parse(data)
+  switch (msg.type) {
+    case 'add-note':
+      await account.addNote(msg.payload)
+      break
+    case 'get-invite':
+      await account.getInvite(msg.payload)
+      break
+    case 'join-note':
+      await account.joinNote(msg.payload)
+      break
+    case 'edit-note':
+      await account.editNote(msg.payload)
+      break
+    default:
+      break
+  }
+})
+
+Bare.on('exit', async () => {
+  await account.close()
+  await swarm.destroy()
+  await store.close()
+})
+```
+
+Here is what each section does:
+
+- **Setup** — creates a Corestore at the storage path passed in via `Bare.argv[2]` (set by `pear.storage` in the Electron process), and a Hyperswarm instance
+- **`swarm.on('connection')`** — replicates the Corestore over every new Hyperswarm peer connection, keeping all Hypercores in sync across peers
+- **`account.open()`** — starts the Account, which opens HyperDB and restores any existing notes
+- **`Bare.IPC.on('data')`** — listens for JSON messages from the renderer and routes them to the correct Account method: `add-note`, `get-invite`, `join-note`, or `edit-note`
+- **`Bare.on('exit')`** — gracefully closes the Account, destroys the Hyperswarm, and closes the Corestore when the worker exits
+
+Notice that `Bare.argv[2]` is the storage path injected by the Electron main process via `pear.run()`. This is how the worker knows where to persist Corestore data.
+
+</Step>
+<Step>
+
+### Create `renderer/app.js`
+
+Create `renderer/app.js`. This file runs in the Electron renderer process and connects the UI to the Bare worker over `bridge`.
+
+```javascript
+const bridge = window.bridge
+const decoder = new TextDecoder('utf-8')
+
+const workers = {
+  main: '/workers/main.js'
+}
+
+bridge.startWorker(workers.main)
+
+// Listen for stdout from the worker and log it to the console
+const offWorkerStdout = bridge.onWorkerStdout(workers.main, (data) => {
+  console.log('worker stdout', '[', workers.main, ']:', decoder.decode(data))
+})
+
+// Listen for stderr from the worker and log it to the console
+const offWorkerStderr = bridge.onWorkerStderr(workers.main, (data) => {
+  console.error('worker stderr', '[', workers.main, ']:', decoder.decode(data))
+})
+
+// Listen for IPC messages from the worker
+const offWorkerIpc = bridge.onWorkerIPC(workers.main, (data) => {
+  const msg = JSON.parse(decoder.decode(data))
+
+  switch (msg.type) {
+    case 'note-updated':
+      renderNote(msg.payload)
+      break
+    case 'note-invite':
+      navigator.clipboard.writeText(msg.payload.invite)
+      break
+    default:
+      break
+  }
+})
+
+// Listen for worker exit and clean up listeners
+const offWorkerExit = bridge.onWorkerExit(workers.main, () => {
+  offWorkerStdout()
+  offWorkerStderr()
+  offWorkerIpc()
+  offWorkerExit()
+})
+
+let editingNoteId = null
+
+const openNoteModalBtn = document.querySelector('.add-note')
+const addNoteModal = document.querySelector('.add-note-modal')
+const closeNoteModalBtn = document.querySelector('.modal-close')
+const modalHeading = addNoteModal.querySelector('h2')
+const modalTitleInput = addNoteModal.querySelector('input')
+const modalContentInput = addNoteModal.querySelector('textarea')
+const modalActionBtn = document.getElementById('create-note')
+
+openNoteModalBtn.addEventListener('click', () => {
+  addNoteModal.classList.remove('hidden')
+})
+
+closeNoteModalBtn.addEventListener('click', () => {
+  addNoteModal.classList.add('hidden')
+  resetModal()
+})
+
+function resetModal() {
+  editingNoteId = null
+  modalHeading.textContent = 'New Note'
+  modalActionBtn.textContent = 'Add Note'
+  modalTitleInput.value = ''
+  modalContentInput.value = ''
+}
+
+function openEditModal(note) {
+  editingNoteId = note.id
+  modalHeading.textContent = 'Edit Note'
+  modalActionBtn.textContent = 'Save'
+  modalTitleInput.value = note.title
+  modalContentInput.value = note.content
+  addNoteModal.classList.remove('hidden')
+}
+
+modalActionBtn.addEventListener('click', () => {
+  const title = modalTitleInput.value
+  const content = modalContentInput.value
+
+  if (!title || !content) {
+    alert('Please fill in both title and content')
+    return
+  }
+
+  if (editingNoteId) {
+    bridge.writeWorkerIPC(
+      workers.main,
+      JSON.stringify({ type: 'edit-note', payload: { id: editingNoteId, title, content } })
+    )
+  } else {
+    bridge.writeWorkerIPC(
+      workers.main,
+      JSON.stringify({ type: 'add-note', payload: { title, content } })
+    )
+  }
+
+  addNoteModal.classList.add('hidden')
+  resetModal()
+})
+
+function renderNote(note) {
+  const container = document.querySelector('.notes')
+  const el = document.createElement('div')
+  el.classList.add('note')
+  el.dataset.id = note.id
+  el.innerHTML = `
+    <div class="note-header">
+      <h3 class="note-title">${note.title}</h3>
+      <div class="note-actions">
+        <button class="edit-btn">Edit</button>
+        <button class="copy-invite-btn">Copy Invite</button>
+      </div>
+    </div>
+    <p class="note-content">${note.content}</p>
+  `
+
+  el.querySelector('.edit-btn').addEventListener('click', () => openEditModal(note))
+  el.querySelector('.copy-invite-btn').addEventListener('click', () => copyInvite(note.id))
+
+  const existing = container.querySelector(`[data-id="${note.id}"]`)
+  if (existing) {
+    container.replaceChild(el, existing)
+    return
+  }
+  container.appendChild(el)
+}
+
+function copyInvite(note_id) {
+  bridge.writeWorkerIPC(
+    workers.main,
+    JSON.stringify({ type: 'get-invite', payload: { id: note_id } })
+  )
+}
+
+const joinInput = document.getElementById('join-input')
+const joinBtn = document.getElementById('join-btn')
+
+joinBtn.addEventListener('click', () => {
+  const invite = joinInput.value.trim()
+  if (!invite) return
+  bridge.writeWorkerIPC(workers.main, JSON.stringify({ type: 'join-note', payload: { invite } }))
+  joinInput.value = ''
+})
+```
+
+Here is what each section does:
+
+- **Setup** — gets the `bridge` object exposed by the Electron preload script, starts the Bare worker at `workers/main.js`, and registers listeners for its stdout, stderr, IPC messages, and exit
+- **`onWorkerIPC`** — routes incoming JSON messages from the worker: `note-updated` calls `renderNote()` to add or refresh a note card; `note-invite` writes the invite string to the clipboard
+- **`onWorkerExit`** — tears down all listeners when the worker exits
+- **Modal logic** — `openNoteModalBtn` shows the modal; `closeNoteModalBtn` hides it and calls `resetModal()`; `openEditModal(note)` pre-fills the form for editing an existing note
+- **`modalActionBtn` click** — sends either an `add-note` or `edit-note` IPC message to the worker via `bridge.writeWorkerIPC()`, depending on whether `editingNoteId` is set
+- **`renderNote(note)`** — creates a note card DOM element with Edit and Copy Invite buttons; replaces the existing card if one with the same `data-id` already exists, otherwise appends it
+- **`copyInvite(note_id)`** — sends a `get-invite` IPC message to the worker; the worker responds with a `note-invite` message, which `onWorkerIPC` writes to the clipboard
+- **Join bar** — on click, reads the invite string from the input and sends a `join-note` IPC message to the worker
+
+Notice that the renderer never calls P2P APIs directly — all peer-to-peer operations go through `bridge.writeWorkerIPC()` to the Bare worker, and all updates come back through `bridge.onWorkerIPC()`.
+
+</Step>
+<Step>
+
+### Update `electron/main.js` to support a custom storage path
+
+By default, Electron enforces a single running instance. To simulate two peers on one machine during development, add support for a `--storage` flag so each instance uses a separate Corestore.
+
+Open `electron/main.js` and make the following two changes.
+
+Add `--storage` to the command definition:
+
+```javascript
+const cmd = command(
+  appName,
+  flag('--storage <path>', 'pass custom storage to pear-runtime'), // add this
+  flag('--no-updates', 'start without OTA updates')
+)
+```
+
+Then, after `const pearStore = cmd.flags.storage`, set the Electron `userData` path if a custom storage path was provided:
+
+```javascript
+if (pearStore) app.setPath('userData', pearStore)
+```
+
+When `--storage` is passed, `getPear()` uses it as the PearRuntime `dir`, and `pear.storage` is forwarded to the Bare worker as `Bare.argv[2]` — so the worker's Corestore is also scoped to that path.
+
+</Step>
+<Step>
+
+### Start the app
+
+```bash
+npm start
+```
+
+You should see your note app launch. To test P2P sync, run a second instance in a separate terminal with a different storage path:
+
+```bash
+npm start -- --storage /tmp/note-app-peer2
+```
+
+You will have two independent peers running on the same machine. Create a note in the first instance, copy its invite key, paste it into the join bar of the second instance, and you will see the note sync across.
+
+</Step>
+</Steps>
